@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Goodnight, Tinku! Reading Buddy</title>
+<style>
+:root{--bg:#101B3A;--card:#1B2A52;--line:#3A4A7A;--cream:#FFF4D6;--amber:#F5B942;--text:#F6F1E4;--muted:#B8C2E0}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:ui-rounded,"Nunito","SF Pro Rounded",system-ui,sans-serif;display:flex;justify-content:center}
+main{width:100%;max-width:430px;min-height:100vh;padding:48px 24px 28px;display:flex;flex-direction:column;align-items:center;gap:22px}
+section[hidden]{display:none}
+section{width:100%;display:flex;flex-direction:column;align-items:center;gap:22px;flex:1}
+h1{margin:0;font-size:30px;font-weight:800;line-height:1.2;text-align:center}
+p{margin:0}
+.muted{color:var(--muted);font-weight:600;line-height:1.5}
+.card{width:100%;background:var(--card);border-radius:20px;padding:18px 20px}
+.label{font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--amber)}
+button{font-family:inherit;cursor:pointer}
+.primary{width:100%;min-height:60px;border-radius:30px;border:none;background:var(--amber);color:var(--bg);font-size:20px;font-weight:800}
+.ghost{flex:1;min-height:56px;border-radius:28px;border:2px solid var(--line);background:transparent;color:var(--text);font-size:17px;font-weight:800}
+.seg{display:flex;gap:10px;width:100%}
+.seg button{flex:1;min-height:52px;border-radius:14px;border:2px solid var(--line);background:transparent;color:var(--text);font-size:17px;font-weight:700}
+.seg button[aria-pressed="true"]{border-color:var(--amber);background:var(--amber);color:var(--bg);font-weight:800}
+.row{display:flex;gap:12px;width:100%}
+.spacer{flex:1}
+.bubble{width:100%;background:var(--cream);color:var(--bg);border-radius:28px;padding:26px 22px;text-align:center;font-size:25px;font-weight:800;line-height:1.35}
+.tipcard{width:100%;background:var(--card);border-radius:28px;padding:26px 22px}
+.tipcard .big{font-size:25px;font-weight:800;line-height:1.35;margin-top:8px}
+.meter{width:100%;height:8px;border-radius:4px;background:var(--line);overflow:hidden}
+.meter i{display:block;height:100%;width:0;background:var(--amber);transition:width .15s}
+.topbar{width:100%;display:flex;justify-content:space-between;align-items:center;font-weight:800}
+.topbar span:last-child{color:var(--muted);font-size:15px;font-weight:700}
+details{width:100%;border:2px solid var(--line);border-radius:16px;padding:12px 16px}
+summary{font-weight:700;cursor:pointer;min-height:32px;display:flex;align-items:center}
+details label.f{display:block;margin:12px 0 4px;font-size:14px;font-weight:700;color:var(--muted)}
+details select,details input[type=range]{width:100%;font-family:inherit;font-size:16px}
+details select{min-height:44px;border-radius:10px;background:var(--card);color:var(--text);border:2px solid var(--line);padding:0 8px}
+.opt{display:flex;gap:12px;align-items:flex-start;width:100%;font-weight:600;line-height:1.4}
+.opt input{width:24px;height:24px;margin-top:2px;accent-color:var(--amber);flex-shrink:0}
+.fine{font-size:12px;color:#A9B4D6;font-weight:600;text-align:center;line-height:1.5}
+.err{color:#FFB4A8;font-weight:700;text-align:center}
+.warn{width:100%;border:2px solid var(--amber);border-radius:14px;padding:12px 14px;font-size:14px;font-weight:600;line-height:1.5}
+button:focus-visible{outline:3px solid var(--cream);outline-offset:2px}
+
+/* POCKET MODE: near-black screen, nothing to look at, voice only */
+body.pocket{background:#000}
+body.pocket main{background:#000}
+body.pocket #reading > *{display:none}
+body.pocket #reading #pocketDot{display:block}
+body.pocket #reading #pocketEnd{display:block}
+#pocketDot{width:14px;height:14px;border-radius:7px;background:var(--amber);opacity:.35;margin:auto}
+#pocketEnd{width:100%;min-height:48px;border-radius:24px;border:1px solid #2a2a2a;background:transparent;color:#6b6b6b;font-size:14px;font-weight:700}
+#pocketDot,#pocketEnd{display:none}
+</style>
+</head>
+<body>
+<main>
+
+<!-- HOME -->
+<section id="home">
+  <svg width="120" height="120" viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="56" fill="none" stroke="#FFF4D6" stroke-opacity=".18" stroke-width="6"/><circle cx="60" cy="60" r="44" fill="#FFF4D6"/><path d="M40 58q8 7 16 0M64 58q8 7 16 0M50 74q10 8 20 0" stroke="#101B3A" stroke-width="3.5" fill="none" stroke-linecap="round"/><circle cx="38" cy="70" r="5" fill="#F5B942" fill-opacity=".45"/><circle cx="82" cy="70" r="5" fill="#F5B942" fill-opacity=".45"/></svg>
+  <h1>Read together</h1>
+  <div class="card"><div class="label">Tonight's book</div><div style="font-size:24px;font-weight:800;margin-top:6px">Goodnight, Tinku!</div><div class="muted" style="font-size:15px">by Preethi Nambiar · 12 pages</div></div>
+  <div style="width:100%"><div style="font-weight:700;margin-bottom:10px">Who is listening tonight?</div>
+    <div class="seg" role="group" aria-label="Age group"><button id="age02" aria-pressed="false">Ages 0 to 2</button><button id="age35" aria-pressed="true">Ages 3 to 5</button></div></div>
+  <label class="opt"><input type="checkbox" id="optFollow" checked><span>Follow along by listening. The book's sentences are matched on this device only. No cloud speech service is ever used.</span></label>
+  <label class="opt"><input type="checkbox" id="optPocket" checked><span>Pocket mode. The screen goes dark and your buddy only talks.</span></label>
+  <p id="cueWarn" class="warn" hidden></p>
+  <details><summary>Buddy voice (for testing)</summary>
+    <label class="f" for="voiceSel">Voice (device voices only)</label><select id="voiceSel"></select>
+    <label class="f" for="rate">Speed</label><input id="rate" type="range" min="0.6" max="1.2" step="0.05" value="0.9">
+    <label class="f" for="pitch">Pitch</label><input id="pitch" type="range" min="0.7" max="1.5" step="0.05" value="1.1">
+    <button id="testVoice" class="ghost" style="width:100%;margin-top:14px;flex:none">Test voice</button></details>
+  <div class="spacer"></div>
+  <button id="toReady" class="primary">Start reading</button>
+  <p class="fine">Story by Preethi Nambiar, illustrations by Sonal Goyal and Sumit Sakhuja. © Pratham Books, 2014, CC BY 4.0.</p>
+</section>
+
+<!-- GET READY -->
+<section id="ready" hidden>
+  <h1>Get your book ready</h1>
+  <p class="muted" style="font-size:17px;text-align:center">Read Goodnight, Tinku! out loud, just like always. Your buddy listens and joins in a few times.</p>
+  <div class="card"><b>1. Hold your own book.</b><div class="muted" style="font-size:15px">Paper copy or any copy you have at home.</div></div>
+  <div class="card"><b>2. Set the phone nearby.</b><div class="muted" style="font-size:15px">Face up, close enough to hear you both. Leave the screen on.</div></div>
+  <div class="card"><b>3. Just read.</b><div class="muted" style="font-size:15px">Your buddy joins in after a quiet pause. Wait for your child's answer.</div></div>
+  <div class="card" style="border:2px solid var(--line);background:transparent"><b>Private by design.</b><div class="muted" style="font-size:15px">The microphone is only on during the story. Sound is checked live and thrown away. It is never recorded, saved, or sent anywhere.</div></div>
+  <p id="micErr" class="err" hidden></p>
+  <div class="spacer"></div>
+  <button id="toReading" class="primary">I'm ready</button>
+</section>
+
+<!-- READING -->
+<section id="reading" hidden>
+  <div class="topbar"><span>Goodnight, Tinku!</span><span id="pageLabel"></span></div>
+  <div class="spacer"></div>
+  <svg id="buddy" width="150" height="150" viewBox="0 0 120 120" aria-hidden="true"></svg>
+  <div id="bubbleWrap" style="width:100%" hidden></div>
+  <div style="text-align:center"><div id="status" style="font-size:24px;font-weight:800">Listening quietly</div><div id="substatus" class="muted" style="margin-top:6px">Keep reading. Your buddy will join in soon.</div></div>
+  <div class="meter" aria-hidden="true"><i id="level"></i></div>
+  <div class="spacer"></div>
+  <button id="turn" class="primary">Turned the page</button>
+  <div class="row"><button id="pause" class="ghost">Pause</button><button id="end" class="ghost">End story</button></div>
+  <div id="pocketDot" aria-hidden="true"></div>
+  <button id="pocketEnd">End story</button>
+</section>
+
+<!-- GOODNIGHT -->
+<section id="done" hidden>
+  <svg width="140" height="140" viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="56" fill="none" stroke="#FFF4D6" stroke-opacity=".18" stroke-width="6"/><circle cx="60" cy="60" r="44" fill="#FFF4D6"/><path d="M40 58q8 7 16 0M64 58q8 7 16 0M50 74q10 8 20 0" stroke="#101B3A" stroke-width="3.5" fill="none" stroke-linecap="round"/><circle cx="38" cy="70" r="5" fill="#F5B942" fill-opacity=".45"/><circle cx="82" cy="70" r="5" fill="#F5B942" fill-opacity=".45"/></svg>
+  <div><h1>Goodnight, Tinku.<br>Goodnight, moon.</h1><p class="muted" style="text-align:center;margin-top:10px;font-size:17px">Sweet dreams, little one.</p></div>
+  <div class="card"><div class="label">For grown-ups</div><div id="summary" style="font-size:17px;font-weight:700;margin-top:6px;line-height:1.45"></div><div class="muted" style="font-size:15px;margin-top:8px">Tomorrow, try asking at bedtime: "What do you do before you go to sleep?"</div><div class="muted" style="font-size:13px;margin-top:10px">Nothing from tonight was recorded or saved.</div></div>
+  <div class="spacer"></div>
+  <button id="again" class="primary">Read again</button>
+</section>
+
+</main>
+<script>
+/* ---------------------------------------------------------------
+   PRIVACY NOTE: audio goes ONLY to (1) an AnalyserNode that measures
+   loudness and (2) the browser's ON-DEVICE speech recognition, used
+   only if the browser confirms it can run locally. There is no
+   MediaRecorder, no upload, no storage (no localStorage, cookies,
+   fetch, or analytics). Ending the story stops the microphone.
+   --------------------------------------------------------------- */
+
+/* ======= 1. EDIT HERE: the story cues =======
+   cue = the LAST sentence(s) printed on the page BEFORE the question.
+   Copy it exactly from your copy of the book.
+   Leave a cue starting with "PASTE" and that page falls back to tapping. */
+const CONFIG = {
+  totalPages: 12,
+  turnSettleMs: 1500,    // tap mode: wait after a page turn
+  quietMs: 3000,         // how long it must be quiet before the buddy joins in
+  answerWaitMs: 9000,    // how long to wait for the child's answer
+  minAnswerVoiceMs: 600, // how much talking counts as an answer
+  tipHoldMs: 8000,       // how long the parent tip stays (ages 0-2)
+  matchThreshold: 0.7,   // share of the cue's words that must be heard (0 to 1)
+  prompts: {
+    2:  {id:'p2',  cue:'It was a bright moonlit night. All the animals in Mangu’s farm were sleeping. Except Tinku!',
+         text:'Why do you think Tinku can’t sleep?', simple:'Why is Tinku awake?', tip:'Point to Tinku and say “awake!”'},
+    4:  {id:'p4',  cue:'PASTE THE LAST SENTENCE OF THE MOON PAGE HERE',
+         text:'What do you think will happen when Tinku goes outside?', simple:'What will Tinku see outside?', tip:'Point to the moon and say “moon!”'},
+    6:  {id:'p6',  cue:'PASTE THE LAST SENTENCE OF THE BAT PAGE HERE',
+         text:'What do you notice about the bat?', simple:'What is the bat doing?', tip:'Make a bat sound or flap your arms.'},
+    10: {id:'p10', cue:'PASTE THE LAST SENTENCE OF THE PAGE WHERE TINKU SNUGGLES WITH MA HERE',
+         text:'Who do you snuggle with at home?', simple:'Who do you cuddle?', tip:'Give your baby a snuggle.'},
+    11: {id:'p11', cue:'PASTE THE LAST SENTENCE OF THE SLEEP-GIVES-ENERGY PAGE HERE',
+         text:'What do you do before you go to sleep?', simple:'What do you do at bedtime?', tip:'Tell your baby your bedtime steps.'}
+  },
+  acks: [{id:'ack1',text:'Good thinking!'},{id:'ack2',text:'I love that!'},{id:'ack3',text:'Thanks for telling me!'}],
+  skip: {id:'skip', text:'That’s okay. Let’s keep reading.'}
+  // Optional recorded voice: put files at audio/<id>.mp3 (ids above; add s for the simple
+  // version, t for the tip, e.g. p2s.mp3, p2t.mp3; also goodnight.mp3). Missing files fall
+  // back to a device voice.
+};
+
+/* MATCHER START (pure functions, no browser needed) */
+const STOP = new Set(['the','a','an','and','of','to','in','on','at','it','was','is','i','he','she','you','my','me','we','his','her','that','this','for','with','as','so','but','or','be','are']);
+function words(s){ return s.toLowerCase().replace(/[’]/g,"'").replace(/[^a-z' ]+/g,' ').split(/\s+/).filter(Boolean).map(w => w.replace(/'s$/,'')); }
+function contentWords(s){ return words(s).filter(w => !STOP.has(w)); }
+function cueIsSet(cue){ return !/^PASTE/.test(cue) && contentWords(cue).length >= 2; }
+function cueScore(heardWords, cue){
+  const cw = contentWords(cue); if(cw.length < 2) return {score:0, hits:0};
+  const heard = new Set(heardWords); let hits = 0;
+  cw.forEach(w => { if(heard.has(w)) hits++; });
+  return {score: hits / cw.length, hits, needed: Math.min(3, cw.length)};
+}
+function cueHeard(heardWords, cue, threshold){
+  if(!cueIsSet(cue)) return false;
+  const r = cueScore(heardWords, cue);
+  return r.score >= threshold && r.hits >= r.needed;
+}
+/* MATCHER END */
+
+const $ = id => document.getElementById(id);
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const screens = ['home','ready','reading','done'];
+function show(name){ screens.forEach(s => $(s).hidden = s !== name); window.scrollTo(0,0); }
+
+let age = '3-5', page = 1, askedPages = new Set(), asked = 0;
+let phase = 'idle'; // idle | reading | busy | paused
+let mode = 'tap';   // 'follow' (listening to the book) or 'tap'
+let armedKey = null, heardBuf = [], interimWords = [];
+let pageTurnedAt = 0, lastVoiceAt = 0, voiceMs = 0, voiceNow = false, speaking = false;
+let stream = null, actx = null, analyser = null, buf = null, threshold = 0.02, tickId = null;
+let rec = null, recActive = false, wake = null;
+
+/* ---------- warn about unset cues ---------- */
+(function(){
+  const missing = Object.keys(CONFIG.prompts).filter(k => !cueIsSet(CONFIG.prompts[k].cue));
+  if(missing.length){
+    const w = $('cueWarn'); w.hidden = false;
+    w.textContent = 'Story cues are not set for ' + missing.length + ' of 5 questions yet. Those questions need a tap (turn pocket mode off) until you paste the book’s sentences into CONFIG.';
+  }
+})();
+
+/* ---------- buddy face ---------- */
+function setBuddy(awake){
+  $('buddy').innerHTML = awake
+   ? '<circle cx="60" cy="60" r="56" fill="none" stroke="#F5B942" stroke-opacity=".55" stroke-width="6"/><circle cx="60" cy="60" r="44" fill="#FFF4D6"/><circle cx="46" cy="56" r="5" fill="#101B3A"/><circle cx="74" cy="56" r="5" fill="#101B3A"/><path d="M48 72q12 12 24 0" stroke="#101B3A" stroke-width="3.5" fill="none" stroke-linecap="round"/><circle cx="36" cy="70" r="5" fill="#F5B942" fill-opacity=".5"/><circle cx="84" cy="70" r="5" fill="#F5B942" fill-opacity=".5"/>'
+   : '<circle cx="60" cy="60" r="56" fill="none" stroke="#FFF4D6" stroke-opacity=".18" stroke-width="6"/><circle cx="60" cy="60" r="44" fill="#FFF4D6"/><path d="M40 58q8 7 16 0M64 58q8 7 16 0M50 74q10 8 20 0" stroke="#101B3A" stroke-width="3.5" fill="none" stroke-linecap="round"/><circle cx="38" cy="70" r="5" fill="#F5B942" fill-opacity=".45"/><circle cx="82" cy="70" r="5" fill="#F5B942" fill-opacity=".45"/>';
+}
+function showBubble(text, tip){
+  const w = $('bubbleWrap'); w.hidden = false;
+  w.innerHTML = tip ? '<div class="tipcard"><div class="label">Try this together</div><div class="big"></div></div>' : '<div class="bubble"></div>';
+  (tip ? w.querySelector('.big') : w.firstChild).textContent = text;
+}
+function hideBubble(){ $('bubbleWrap').hidden = true; $('bubbleWrap').innerHTML = ''; }
+
+/* ---------- buddy voice: recorded clip first, device voice as fallback ---------- */
+let voices = [];
+function loadVoices(){
+  if(!('speechSynthesis' in window)) return;
+  voices = speechSynthesis.getVoices().filter(v => v.localService); // device voices only
+  const sel = $('voiceSel'); sel.innerHTML = '';
+  voices.forEach((v,i) => { const o = document.createElement('option'); o.value = i; o.textContent = v.name + ' (' + v.lang + ')'; sel.appendChild(o); });
+  const en = voices.findIndex(v => /^en/i.test(v.lang)); if(en >= 0) sel.value = en;
+}
+if('speechSynthesis' in window){ speechSynthesis.onvoiceschanged = loadVoices; loadVoices(); }
+function playClip(id){
+  return new Promise(res => {
+    const a = new Audio('audio/' + id + '.mp3');
+    a.onended = () => res(true); a.onerror = () => res(false);
+    a.play().catch(() => res(false));
+  });
+}
+function speakDevice(text){
+  return new Promise(res => {
+    if(!('speechSynthesis' in window)){ setTimeout(res, 1500 + text.length * 50); return; }
+    const u = new SpeechSynthesisUtterance(text);
+    const v = voices[+$('voiceSel').value]; if(v) u.voice = v;
+    u.rate = +$('rate').value; u.pitch = +$('pitch').value;
+    u.onend = res; u.onerror = res;
+    speechSynthesis.cancel(); speechSynthesis.speak(u);
+    setTimeout(res, 8000 + text.length * 80);
+  });
+}
+async function say(text, id){
+  speaking = true;
+  const ok = id ? await playClip(id) : false;
+  if(!ok) await speakDevice(text);
+  await sleep(500);
+  speaking = false;
+  heardBuf = []; interimWords = []; // never count the buddy's own words as the book
+}
+$('testVoice').onclick = () => speakDevice('Hi! Let’s read together.');
+
+/* ---------- microphone: loudness only ---------- */
+async function startMic(){
+  stream = await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true}});
+  actx = new (window.AudioContext || window.webkitAudioContext)();
+  const src = actx.createMediaStreamSource(stream);
+  analyser = actx.createAnalyser(); analyser.fftSize = 1024;
+  src.connect(analyser); // deliberately NOT connected to speakers or a recorder
+  buf = new Float32Array(analyser.fftSize);
+  let sum = 0, n = 0;
+  for(let i = 0; i < 8; i++){ await sleep(190); sum += rms(); n++; }
+  threshold = Math.max(0.015, (sum / n) * 3);
+}
+function rms(){ analyser.getFloatTimeDomainData(buf); let s = 0; for(let i = 0; i < buf.length; i++) s += buf[i]*buf[i]; return Math.sqrt(s / buf.length); }
+function stopMic(){
+  clearInterval(tickId); tickId = null; stopRecognition();
+  if(stream) stream.getTracks().forEach(t => t.stop());
+  if(actx) actx.close();
+  stream = actx = analyser = null;
+  releaseWake();
+}
+
+/* ---------- keep the screen awake (a locked screen can stop the mic) ---------- */
+async function lockWake(){ try{ if('wakeLock' in navigator) wake = await navigator.wakeLock.request('screen'); }catch(e){} }
+function releaseWake(){ try{ if(wake) wake.release(); }catch(e){} wake = null; }
+document.addEventListener('visibilitychange', () => { if(document.visibilityState === 'visible' && phase !== 'idle') lockWake(); });
+
+/* ---------- follow along: ON-DEVICE speech recognition only ---------- */
+function startRecognition(){
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if(!SR) return 'unsupported';
+  const r = new SR();
+  if(!('processLocally' in r)) return 'not-local'; // refuse: this browser might use a cloud service
+  r.processLocally = true; r.continuous = true; r.interimResults = true; r.lang = 'en-US';
+  r.onresult = e => {
+    if(speaking || phase === 'paused') return;
+    interimWords = [];
+    for(let i = e.resultIndex; i < e.results.length; i++){
+      const w = words(e.results[i][0].transcript);
+      if(e.results[i].isFinal){ heardBuf = heardBuf.concat(w).slice(-80); } else { interimWords = interimWords.concat(w); }
+    }
+    checkCues();
+  };
+  r.onerror = e => { if(e.error === 'language-not-supported' || e.error === 'service-not-allowed' || e.error === 'not-allowed'){ recActive = false; mode = 'tap'; enableTapFallback(); } };
+  r.onend = () => { if(recActive){ try{ r.start(); }catch(e){} } };
+  rec = r; recActive = true;
+  try{ r.start(); }catch(e){ recActive = false; return 'failed'; }
+  return 'ok';
+}
+function stopRecognition(){ recActive = false; try{ if(rec) rec.abort(); }catch(e){} rec = null; }
+function checkCues(){
+  if(phase !== 'reading') return;
+  const heard = heardBuf.concat(interimWords);
+  for(const k of Object.keys(CONFIG.prompts)){
+    if(askedPages.has(+k)) continue;
+    if(cueHeard(heard, CONFIG.prompts[k].cue, CONFIG.matchThreshold)){
+      armedKey = +k; heardBuf = []; interimWords = []; return; // arm: ask after a quiet pause
+    }
+  }
+}
+function enableTapFallback(){
+  document.body.classList.remove('pocket');
+  $('pageLabel').textContent = 'Page ' + page + ' of ' + CONFIG.totalPages;
+  $('turn').hidden = false;
+  $('substatus').textContent = 'Automatic page following is not available here, so tap after each page.';
+}
+
+/* ---------- the listening loop (the "nudge" logic) ---------- */
+function tick(){
+  if(!analyser || phase === 'paused') return;
+  const level = rms();
+  voiceNow = !speaking && level > threshold;
+  $('level').style.width = Math.min(100, level / (threshold * 4) * 100) + '%';
+  const now = Date.now();
+  if(voiceNow){ lastVoiceAt = now; voiceMs += 200; }
+  if(phase !== 'reading') return;
+  $('status').textContent = voiceNow ? 'Hearing you read' : 'Listening quietly';
+  if(mode === 'follow'){
+    if(armedKey !== null && now - lastVoiceAt > CONFIG.quietMs){ const k = armedKey; armedKey = null; runPrompt(k); }
+  } else {
+    const p = CONFIG.prompts[page];
+    if(p && !askedPages.has(page) && now - pageTurnedAt > CONFIG.turnSettleMs && now - lastVoiceAt > CONFIG.quietMs) runPrompt(page);
+  }
+}
+function waitForAnswer(ms){
+  return new Promise(res => {
+    voiceMs = 0; lastVoiceAt = 0; const start = Date.now();
+    const iv = setInterval(() => {
+      const now = Date.now();
+      if(phase === 'paused') return;
+      if(voiceMs >= CONFIG.minAnswerVoiceMs && now - lastVoiceAt > 1500){ clearInterval(iv); res(true); }
+      else if(now - start > ms){ clearInterval(iv); res(false); }
+    }, 200);
+  });
+}
+async function runPrompt(key){
+  const p = CONFIG.prompts[key];
+  phase = 'busy'; askedPages.add(+key); setBuddy(true);
+  if(age === '0-2'){
+    $('status').textContent = 'Your buddy has an idea'; $('substatus').textContent = '';
+    showBubble(p.tip, true); await say(p.tip, p.id + 't'); await sleep(CONFIG.tipHoldMs);
+    return backToReading();
+  }
+  asked++;
+  for(let attempt = 0; attempt < 2; attempt++){
+    const text = attempt ? p.simple : p.text;
+    $('status').textContent = 'Your buddy asks'; $('substatus').textContent = '';
+    showBubble(text, false); await say(text, attempt ? p.id + 's' : p.id);
+    $('status').textContent = 'Listening for your answer'; $('substatus').textContent = 'Grown-ups: wait a few seconds. If your child is unsure, ask again in your own words.';
+    if(phase === 'paused') return;
+    if(await waitForAnswer(CONFIG.answerWaitMs)){
+      const a = CONFIG.acks[Math.floor(Math.random() * CONFIG.acks.length)];
+      showBubble(a.text, false); await say(a.text, a.id); return backToReading();
+    }
+  }
+  showBubble(CONFIG.skip.text, false); await say(CONFIG.skip.text, CONFIG.skip.id);
+  backToReading();
+}
+function backToReading(){
+  hideBubble(); setBuddy(false);
+  $('status').textContent = 'Listening quietly'; $('substatus').textContent = 'Keep reading. Your buddy will join in soon.';
+  lastVoiceAt = Date.now(); pageTurnedAt = Date.now(); armedKey = null; heardBuf = []; interimWords = [];
+  if(phase !== 'paused') phase = 'reading';
+}
+
+/* ---------- screens and buttons ---------- */
+function setAge(a){ age = a; $('age02').setAttribute('aria-pressed', a === '0-2'); $('age35').setAttribute('aria-pressed', a === '3-5'); }
+$('age02').onclick = () => setAge('0-2'); $('age35').onclick = () => setAge('3-5');
+$('toReady').onclick = () => show('ready');
+$('toReading').onclick = async () => {
+  const err = $('micErr'); err.hidden = true;
+  $('toReading').disabled = true; $('toReading').textContent = 'Getting ready...';
+  try{ await startMic(); }
+  catch(e){ err.textContent = 'We could not use the microphone. Please allow it in your browser and try again.'; err.hidden = false; $('toReading').disabled = false; $('toReading').textContent = 'I’m ready'; return; }
+  $('toReading').disabled = false; $('toReading').textContent = 'I’m ready';
+  page = 1; asked = 0; askedPages = new Set(); armedKey = null; heardBuf = []; interimWords = [];
+  setBuddy(false); hideBubble();
+  mode = 'tap';
+  if($('optFollow').checked && startRecognition() === 'ok') mode = 'follow';
+  const wantsPocket = $('optPocket').checked && mode === 'follow'; // pocket needs auto-follow, or nobody could advance pages
+  document.body.classList.toggle('pocket', wantsPocket);
+  $('turn').hidden = (mode === 'follow');
+  $('pageLabel').textContent = mode === 'follow' ? '' : 'Page 1 of ' + CONFIG.totalPages;
+  $('substatus').textContent = (mode === 'follow' || !$('optFollow').checked) ? 'Keep reading. Your buddy will join in soon.' : 'Automatic page following is not available on this device, so tap after each page.';
+  updatePage(); phase = 'reading'; pageTurnedAt = lastVoiceAt = Date.now();
+  show('reading'); tickId = setInterval(tick, 200); lockWake();
+};
+function updatePage(){
+  if(mode === 'follow') return;
+  $('pageLabel').textContent = 'Page ' + page + ' of ' + CONFIG.totalPages;
+  $('turn').textContent = page >= CONFIG.totalPages ? 'Finish the story' : 'Turned the page';
+}
+$('turn').onclick = () => {
+  if(phase === 'busy') return;
+  if(page >= CONFIG.totalPages) return finish();
+  page++; updatePage(); pageTurnedAt = Date.now();
+};
+$('pause').onclick = () => {
+  if(phase === 'paused'){ phase = 'reading'; $('pause').textContent = 'Pause'; stream.getTracks().forEach(t => t.enabled = true); lastVoiceAt = Date.now(); }
+  else{ phase = 'paused'; $('pause').textContent = 'Resume'; stream.getTracks().forEach(t => t.enabled = false); $('status').textContent = 'Paused'; $('substatus').textContent = 'The microphone is off.'; if('speechSynthesis' in window) speechSynthesis.cancel(); }
+};
+$('end').onclick = finish; $('pocketEnd').onclick = finish;
+async function finish(){
+  if('speechSynthesis' in window) speechSynthesis.cancel();
+  phase = 'idle'; stopMic(); hideBubble(); document.body.classList.remove('pocket');
+  $('summary').textContent = age === '3-5'
+    ? 'Tonight your buddy asked ' + asked + ' question' + (asked === 1 ? '' : 's') + ' about the story and about home.'
+    : 'Tonight your buddy shared ' + askedPages.size + ' idea' + (askedPages.size === 1 ? '' : 's') + ' for talking and playing together.';
+  show('done');
+  await say('Goodnight, Tinku. Goodnight, moon.', 'goodnight');
+}
+$('again').onclick = () => show('home');
+window.addEventListener('pagehide', stopMic);
+setBuddy(false);
+</script>
+</body>
+</html>
